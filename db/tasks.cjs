@@ -3,7 +3,7 @@ const client = require('./client.cjs')
 const createTask = async(taskData)=>{
 try{
   const {rows: newTask} = await client.query(`
-    INSERT INTO TABLE tasks (category, task, due_date, task_place_distance, tast_estimated_duration, solo_or_group)
+    INSERT INTO tasks (category, task, due_date, task_place_distance, tast_estimated_duration, solo_or_group)
     VALUE ($1, $2, $3, $4, $5, $6)
     RETURNING *
     `, [taskData.category, taskData.task, taskData.dueDate, taskData.taskPlaceDistance, taskData.soloOrGroup]

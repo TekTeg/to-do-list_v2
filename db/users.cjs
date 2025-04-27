@@ -3,28 +3,31 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
 const createUser = async(userData)=>{
-  console.log(userData.email)
+  console.log( userData )
   try{
     const {rows:userExits} = await client.query (`
       SELECT * FROM users WHERE email = '${userData.email}';
       `)
-    console.log('checking email')
-    console.log(rows)
-    if(userExits) {
-      throw new Error('User with this email already exists');
+    
+    console.log(userExits)
+    if(userExits[0]) {
+      throw new Error('User with this email already exists.');
     }
     else{
+    
       const encryptedPassword = await bcrypt.hash(userData.password, 10)
-      const {rows:user} = await client.query (`
-        INSERT INTO TABLE users ( email, password, gender, age, sleep_pattern)
+      const {rows} = await client.query (`
+        INSERT INTO users ( email, password, gender, age, sleep_pattern)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING *
         `, [userData.email, encryptedPassword, userData.gender, userData.age, userData.sleepPattern]);
+      const user = rows[0]
       return user
     }
             
   }catch(err){
-    console.log('Error creating user. '+ err)
+    console.log('Error creating user.')
+    throw err
   }
 }
 const updateUserDetails = async()=>{

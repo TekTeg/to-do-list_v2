@@ -9,8 +9,6 @@ usersRouter.get('/', async(req, res, next)=>{
 //Registration
 usersRouter.post('/register', async(req, res, next)=>{
   try{
-    console.log("req.body")
-    console.log(req.body)
     const userData = req.body
     const user = await createUser(userData)
     res.status(201).json({
@@ -18,7 +16,18 @@ usersRouter.post('/register', async(req, res, next)=>{
       data:user
     })
   }catch(err){
-    console.log('Error creating user' + err)
+    if(err.message === 'User with this email already exists.')
+      {
+        res.status(409).json({
+            success: false,
+            message: err.message
+        });
+    } else {
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
   }
 })
 
