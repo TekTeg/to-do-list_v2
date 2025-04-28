@@ -1,4 +1,5 @@
 const client = require('./client.cjs')
+require("dotenv").config();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
@@ -8,7 +9,6 @@ const createUser = async(userData)=>{
     const {rows:userExits} = await client.query (`
       SELECT * FROM users WHERE email = '${userData.email}';
       `)
-    
     console.log(userExits)
     if(userExits[0]) {
       throw new Error('User with this email already exists.');
@@ -30,16 +30,39 @@ const createUser = async(userData)=>{
     throw err
   }
 }
-const updateUserDetails = async()=>{
-  console.log( 'creating user')
-}
-const getUser = async()=>{
-  console.log( 'creating user')
+
+const getUser = async(email, password)=>{
+  try{
+    const {rows} = await client.query (`
+      SELECT * FROM users WHERE email = '${email}';
+      `)
+    const userExits = rows[0];
+    if (!userExits) {
+      throw new Error('Username and Password does not match!')
+    }else{
+      const hashedPassword = userExits.password;
+      const isPasswordCorrect =  await bcrypt.compare(password, hashedPassword)
+      if(isPasswordCorrect)
+      {
+        const token = await jwt.sign ({userId:userExits.id}, process.env.JWT_SECRET);
+        return {
+          userToken:token,
+          user:userExits
+        }
+      }else{
+        throw new Error('Username and Password does not match!')
+      }
+    }
+  }catch(err){
+    console.log('source' + err)
+  }
 }
 const getUserByToken = async()=>{
   console.log( 'creating user')
 }
-
+const updateUserDetails = async()=>{
+  console.log( 'creating user')
+}
 
 module.exports = {
 createUser, 

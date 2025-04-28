@@ -5,11 +5,16 @@ const tasksRouter = express.Router()
 tasksRouter.get('/', async(req, res, next)=>{
   await res.send('this is task')
 })
-tasksRouter.post('/log', async(req, res, next)=>{
+tasksRouter.post('/add', async(req, res, next)=>{
  try{
-  
+  console.log(req.body)
   const taskData = await req.body
   const newTask = await createTask(taskData)
+  res.json({
+    success: true,
+    data: newTask
+
+ })
  }catch(err){
   console.log("Error reaching task creation. "+ err)
  }

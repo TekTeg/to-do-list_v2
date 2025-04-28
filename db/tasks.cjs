@@ -4,10 +4,11 @@ const createTask = async(taskData)=>{
 try{
   const {rows: newTask} = await client.query(`
     INSERT INTO tasks (category, task, due_date, task_place_distance, tast_estimated_duration, solo_or_group)
-    VALUE ($1, $2, $3, $4, $5, $6)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
-    `, [taskData.category, taskData.task, taskData.dueDate, taskData.taskPlaceDistance, taskData.soloOrGroup]
+    `, [taskData.category, taskData.task, taskData.dueDate, taskData.taskPlaceDistance, taskData.estimatedDuration, taskData.soloOrGroup]
   );
+  return newTask
 }catch(err){
   console.log("Error creating task" + err)
 }
