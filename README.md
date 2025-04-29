@@ -1,2 +1,2 @@
-## To-Do-List
-- To do list to help procratnators
+## READ ME
+* This is a to-do list
