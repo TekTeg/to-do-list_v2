@@ -1,7 +1,8 @@
-body{
+body, html {
  display:grid;
+ height: 100%;
+ margin: 0;
 background-color: #778899;
-justify-content: center;
 font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif
 
 }
@@ -12,7 +13,8 @@ font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans
   background-color: #6a7a89;
   align-items: center;
   border-radius: 5px;
-  min-width: 800px;
+  margin: 5% 5%;
+  height: 100%;
 }
 .login-form{
   display: flex;
