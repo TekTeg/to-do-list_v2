@@ -13,7 +13,7 @@ font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans
   background-color: #6a7a89;
   align-items: center;
   border-radius: 5px;
-  margin: 5% 5%;
+  margin: 0% 5%;
   height: 100%;
 }
 .login-form{

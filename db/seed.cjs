@@ -51,9 +51,15 @@ const seedAndSync= async()=>{
   console.log('5 creating tables')
   await createTables()
   console.log('6 table created')
-  await createUser()
+  await createUser({email:'betty@fake.com', 
+    password:'betty1'})
   console.log('7 user created')
-  await createTask()
+  await createTask({category:'Office', 
+    task:'Email Boop', 
+    dueDate: '2025-01-04', 
+    taskPlaceDistance:0, 
+    estimatedDuration: 0.5, 
+    soloOrGroup:'Solo'})
   console.log('8 task created')
   console.log('9 disconnection from the DB')
   client.end()

@@ -36,37 +36,38 @@ usersRouter.post('/register', async (req, res, next) => {
 })
 //Login
 usersRouter.post('/login', async (req, res, next) => {
-  try {
-    const {
-      email,
-      password
-    } = req.body
-    console.log(req.body)
-    const {
-      user,
-      userToken
-    } = await getUser(email, password)
-    console.log('user created')
-    console.log(userToken)
-    res.json({
-      success: true,
-      user: user,
-      token: userToken
-    })
-  } catch (err) {
-    if(err.message === 'Username and Password does not match!')
-      {
-        res.status(409).json({
-            success: false,
-            message: err.message
-        });
-    } else {
-        res.status(500).json({
-            success: false,
-            message: 'Internal server error'
-        });
-    }
-  }
+  console.log(req.body)
+  // try {
+  //   const {
+  //     email,
+  //     password
+  //   } = req.body
+  //   console.log(req.body)
+  //   const {
+  //     user,
+  //     userToken
+  //   } = await getUser(email, password)
+  //   console.log('user created')
+  //   console.log(userToken)
+  //   res.json({
+  //     success: true,
+  //     user: user,
+  //     token: userToken
+  //   })
+  // } catch (err) {
+  //   if(err.message === 'Username and Password does not match!')
+  //     {
+  //       res.status(409).json({
+  //           success: false,
+  //           message: err.message
+  //       });
+  //   } else {
+  //       res.status(500).json({
+  //           success: false,
+  //           message: 'Internal server error'
+  //       });
+  //   }
+  // }
 })
 
 module.exports =

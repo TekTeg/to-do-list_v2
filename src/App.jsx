@@ -9,7 +9,19 @@ function App() {
   const [loginPasswordSelected, setLoginPasswordSelected] = useState(false);
   const login =async(e)=>{
     e.preventDefault();
-    console.log('logging')
+    console.log(loginEmail + " " +loginPassword)
+    const response = await fetch('api/v1/users/login', {
+      method:'POST',
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        email:loginEmail,
+        password:loginPassword
+      })
+    })
+    const result = await response.json()
+    console.log(result)
   }
   
   return (
