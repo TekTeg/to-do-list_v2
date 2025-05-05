@@ -67,3 +67,9 @@ font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans
 .register-form select{
   margin-block: 10px;
 }
+.nav-bar{
+  flex-direction: row-reverse;
+  display: flex;
+  justify-content:space-around;
+}
+

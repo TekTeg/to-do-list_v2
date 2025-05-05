@@ -22,7 +22,8 @@ const createTables=async()=>{
         password VARCHAR NOT NULL,
         gender VARCHAR,
         age INT,
-        sleep_pattern VARCHAR
+        sleep_pattern VARCHAR,
+        wakeup_pattern VARCHAR
       );
       CREATE TABLE tasks (
         id SERIAL PRIMARY KEY,
