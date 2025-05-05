@@ -55,3 +55,15 @@ font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans
   z-index: 0;
   background-color: beige;
 }
+.register-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-content: center;
+}
+.register-form input{
+  margin-block: 10px;
+}
+.register-form select{
+  margin-block: 10px;
+}
