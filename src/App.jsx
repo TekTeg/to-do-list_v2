@@ -7,6 +7,9 @@ function App() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginEmailSelected, setLoginEmailSelected] = useState(false);
   const [loginPasswordSelected, setLoginPasswordSelected] = useState(false);
+
+  const [token, setToken] = useState(localStorage.getItem("token"))
+  const [loggedUser, SetLoggedUser] = useState(null)
   const login =async(e)=>{
     e.preventDefault();
     console.log(loginEmail + " " +loginPassword)
@@ -22,6 +25,10 @@ function App() {
     })
     const result = await response.json()
     console.log(result)
+    setToken(result.token)
+    localStorage.setItem('token', result.token)
+    window.alert(result.success)
+    SetLoggedUser(result.user)
   }
   
   return (
