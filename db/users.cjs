@@ -17,10 +17,10 @@ const createUser = async(userData)=>{
     
       const encryptedPassword = await bcrypt.hash(userData.password, 10)
       const {rows} = await client.query (`
-        INSERT INTO users ( email, password, gender, age, sleep_pattern)
-        VALUES ($1, $2, $3, $4, $5)
+        INSERT INTO users ( email, password, gender, age, sleep_pattern, wakeup_pattern)
+        VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *
-        `, [userData.email, encryptedPassword, userData.gender, userData.age, userData.sleepPattern]);
+        `, [userData.email, encryptedPassword, userData.gender, userData.age, userData.sleepPattern, userData.wakeUpPattern]);
       const user = rows[0]
       return user
     }

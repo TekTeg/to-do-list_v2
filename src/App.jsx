@@ -14,6 +14,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("token"))
   const [loggedUser, SetLoggedUser] = useState(null)
 
+  const [registered, setRegistered] = useState(false)
   const [registeringEmail, setRegisteringEmail] = useState('')
   const [registeringPassword, setRegisteringPassword] = useState('')
   const [gender, setGender] = useState('')
@@ -43,10 +44,28 @@ function App() {
     SetLogginSelected(false)
   }
 
-  const register = (e) => {
-    e.preventDefault()
-    console.log(registeringEmail + ' ' + registeringPassword + ' ' + gender + ' ' + age + ' ' + sleepPattern + ' ' + wakeUpPattern)
-    
+  const register = async (e) => {
+    e.preventDefault();
+    console.log(registeringEmail)
+    const response = await fetch ('/api/v1/users/register',{
+      method: 'POST',
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({
+        email:registeringEmail,
+        password:registeringPassword,
+        gender:gender,
+        age:age,
+        sleepPattern:sleepPattern,
+        wakeUpPattern:wakeUpPattern
+      })
+    })
+    const result = await response.json()
+    console.log(result)
+    if( !result.success){
+    window.alert(result.message)}
+    else {setRegistered(true)}
   }
 
   const navSelector = (e) => {
@@ -114,7 +133,13 @@ function App() {
             </form>
           </div>
         }
-        {
+        { registered? <div><p>You have successfully registered. Click below to log in</p>
+        <button onClick={(e)=>{
+          SetLogginSelected(true), 
+          SetRegisterSelected(false), 
+          SetListSelected(false),
+          setRegistered(false)
+        }}>Login</button></div>:
           registerSelected &&
           <div>
             <h2>Register</h2>
