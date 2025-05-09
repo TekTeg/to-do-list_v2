@@ -2,8 +2,13 @@ const {createTask, updateTaskDetails, getTask, getAllTasks, getTasksByCategory, 
 const express = require('express')
 const tasksRouter = express.Router()
 
-tasksRouter.get('/', async(req, res, next)=>{
-  await res.send('this is task')
+tasksRouter.get('/get', async(req, res, next)=>{
+  console.log(req.headers.authorization)
+
+  const token = await req.headers.authorization
+  const tasks = await getAllTasks(token)
+  res.send(tasks)
+  
 })
 tasksRouter.post('/add', async(req, res, next)=>{
  try{

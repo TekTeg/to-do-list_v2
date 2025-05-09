@@ -22,6 +22,8 @@ function App() {
   const [sleepPattern, setSleepPattern] = useState('')
   const [wakeUpPattern, setWakeUpPattern] = useState('')
 
+  const [tasksList, setTasksList] = useState([])
+
   const login = async (e) => {
     e.preventDefault();
     console.log(loginEmail + " " + loginPassword)
@@ -47,25 +49,26 @@ function App() {
   const register = async (e) => {
     e.preventDefault();
     console.log(registeringEmail)
-    const response = await fetch ('/api/v1/users/register',{
+    const response = await fetch('/api/v1/users/register', {
       method: 'POST',
-      headers:{
-        "Content-Type":"application/json"
+      headers: {
+        "Content-Type": "application/json"
       },
-      body:JSON.stringify({
-        email:registeringEmail,
-        password:registeringPassword,
-        gender:gender,
-        age:age,
-        sleepPattern:sleepPattern,
-        wakeUpPattern:wakeUpPattern
+      body: JSON.stringify({
+        email: registeringEmail,
+        password: registeringPassword,
+        gender: gender,
+        age: age,
+        sleepPattern: sleepPattern,
+        wakeUpPattern: wakeUpPattern
       })
     })
     const result = await response.json()
     console.log(result)
-    if( !result.success){
-    window.alert(result.message)}
-    else {setRegistered(true)}
+    if (!result.success) {
+      window.alert(result.message)
+    }
+    else { setRegistered(true) }
   }
 
   const navSelector = (e) => {
@@ -83,106 +86,130 @@ function App() {
       localStorage.removeItem("token"), setToken(null)
     }
   }
+  const showList = async () => {
+    const localStorageToken = localStorage.getItem('token')
+    const response = await fetch ('/api/v1/tasks/get', {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": localStorageToken,
+      }
+    })
+    const result = await response.json()
+    console.log(result)
+    setTasksList(result)
+}
+
+return (
+  <div className='main-display'>
+    <div className='nav-bar'>
+      {
+        token ?
+          <p onClick={navSelector}>Signout</p> :
+          <p onClick={navSelector}>Login</p>
+      }
+
+      <p onClick={navSelector}>Register</p>
+      <p onClick={navSelector}>Task</p>
 
 
-  return (
-    <div className='main-display'>
-      <div className='nav-bar'>
-        {
-          token ?
-            <p onClick={navSelector}>Signout</p> :
-            <p onClick={navSelector}>Login</p>
-        }
-
-        <p onClick={navSelector}>Register</p>
-        <p onClick={navSelector}>Task</p>
-
-
-      </div>
-      <div className='main-page'>
-        <h1>TO DO LIST</h1>
-        {
-          loginSelected &&
-          <div>
-            <h2>Login</h2>
-            <form onSubmit={login} className='login-form'>
-              <div className='login-email-container'>
-                {
-                  loginEmailSelected && <p>email</p>
-                }
-                <input
-                  placeholder='email' type='email'
-                  onChange={(e) => setLoginEmail(e.target.value)}
-                  onSelect={(e) => { e.target.placeholder = '', setLoginEmailSelected(true) }}
-                  onBlur={(e) => { e.target.placeholder = 'email', setLoginEmailSelected(false) }}
-                />
-              </div>
-              <div className='login-password-container'>
-                {
-                  loginPasswordSelected && <p>password</p>
-                }
-
-                <input placeholder='password' type='password'
-                  onChange={(e) => setLoginPassword(e.target.value)}
-                  onSelect={(e) => { e.target.placeholder = '', setLoginPasswordSelected(true) }}
-                  onBlur={(e) => { e.target.placeholder = 'password', setLoginPasswordSelected(false) }}
-
-                />
-              </div>
-              <button>Login</button>
-            </form>
-          </div>
-        }
-        { registered? <div><p>You have successfully registered. Click below to log in</p>
-        <button onClick={(e)=>{
-          SetLogginSelected(true), 
-          SetRegisterSelected(false), 
-          SetListSelected(false),
-          setRegistered(false)
-        }}>Login</button></div>:
-          registerSelected &&
-          <div>
-            <h2>Register</h2>
-            <form onSubmit={register} className='register-form'>
-              <input placeholder="email"
-                type ='email'
-                onChange={(e)=>setRegisteringEmail(e.target.value)} />
-              <input placeholder="password"
-                type='password'
-                onChange={(e)=>setRegisteringPassword(e.target.value)} />
-              <input placeholder="gender" 
-                onChange={(e)=>setGender(e.target.value)} />
-              <input placeholder="age"
-                type='number'
-                onChange={(e)=>setAge(e.target.value)} />
-              <lable for="sleep pattern">Sleep Pattern</lable>
-              <select name="sleep pattern" 
-                onChange={(e)=>setSleepPattern(e.target.value)}>
-                <option></option>
-                <option>Sleeps Early</option>
-                <option>Sleeps Late</option>
-                <option>Not Sure</option>
-              </select>
-              <select name="wake up pattern" 
-                onChange={(e)=>setWakeUpPattern(e.target.value)}>
-                <option></option>
-                <option>Wakes up Early</option>
-                <option>Wakes up Late</option>
-                <option>Not Sure</option>
-              </select>
-              <button>Register</button>
-            </form>
-          </div>
-        }
-        {
-          listSelected &&
-          <div>
-            <h1> List</h1>
-          </div>
-        }
-      </div>
     </div>
-  )
+    <div className='main-page'>
+      <h1>TO DO LIST</h1>
+      {
+        loginSelected &&
+        <div>
+          <h2>Login</h2>
+          <form onSubmit={login} className='login-form'>
+            <div className='login-email-container'>
+              {
+                loginEmailSelected && <p>email</p>
+              }
+              <input
+                placeholder='email' type='email'
+                onChange={(e) => setLoginEmail(e.target.value)}
+                onSelect={(e) => { e.target.placeholder = '', setLoginEmailSelected(true) }}
+                onBlur={(e) => { e.target.placeholder = 'email', setLoginEmailSelected(false) }}
+              />
+            </div>
+            <div className='login-password-container'>
+              {
+                loginPasswordSelected && <p>password</p>
+              }
+
+              <input placeholder='password' type='password'
+                onChange={(e) => setLoginPassword(e.target.value)}
+                onSelect={(e) => { e.target.placeholder = '', setLoginPasswordSelected(true) }}
+                onBlur={(e) => { e.target.placeholder = 'password', setLoginPasswordSelected(false) }}
+
+              />
+            </div>
+            <button>Login</button>
+          </form>
+        </div>
+      }
+      {registered ? <div><p>You have successfully registered. Click below to log in</p>
+        <button onClick={(e) => {
+          SetLogginSelected(true),
+            SetRegisterSelected(false),
+            SetListSelected(false),
+            setRegistered(false)
+        }}>Login</button></div> :
+        registerSelected &&
+        <div>
+          <h2>Register</h2>
+          <form onSubmit={register} className='register-form'>
+            <input placeholder="email"
+              type='email'
+              onChange={(e) => setRegisteringEmail(e.target.value)} />
+            <input placeholder="password"
+              type='password'
+              onChange={(e) => setRegisteringPassword(e.target.value)} />
+            <input placeholder="gender"
+              onChange={(e) => setGender(e.target.value)} />
+            <input placeholder="age"
+              type='number'
+              onChange={(e) => setAge(e.target.value)} />
+            <lable for="sleep pattern">Sleep Pattern</lable>
+            <select name="sleep pattern"
+              onChange={(e) => setSleepPattern(e.target.value)}>
+              <option></option>
+              <option>Sleeps Early</option>
+              <option>Sleeps Late</option>
+              <option>Not Sure</option>
+            </select>
+            <select name="wake up pattern"
+              onChange={(e) => setWakeUpPattern(e.target.value)}>
+              <option></option>
+              <option>Wakes up Early</option>
+              <option>Wakes up Late</option>
+              <option>Not Sure</option>
+            </select>
+            <button>Register</button>
+          </form>
+        </div>
+      }
+      {
+        listSelected &&
+        <div>
+          <h1> List</h1>
+          <h2 onClick={showList}>Show List</h2>
+          {
+            tasksList.map((task)=>{return(<div>
+              <p>Category: {task.category}</p>
+              <p>Task: {task.task}</p>
+              <p>Due: {task.due_date}</p>
+              <p>Duration: {task.task_estimated_duration}</p>
+              <p>Working Group: {task.solo_or_group}</p>
+              </div>
+            )
+            })
+          }
+        </div>
+      }
+    </div>
+  </div>
+)
 }
 
 export default App

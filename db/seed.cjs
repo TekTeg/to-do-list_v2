@@ -4,8 +4,8 @@ const {createTask} = require ('./tasks.cjs')
 const dropTables =async()=>{
   try{
     await client.query(`
-      DROP TABLE IF EXISTS users;
       DROP TABLE IF EXISTS tasks;
+      DROP TABLE IF EXISTS users;
       `)
     
   }catch (err){
@@ -27,11 +27,12 @@ const createTables=async()=>{
       );
       CREATE TABLE tasks (
         id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id) NOT NULL,
         category VARCHAR NOT NULL,
         task VARCHAR NOT NULL,
         due_date VARCHAR NOT NULL,
         task_place_distance INT,
-        tast_estimated_duration VARCHAR NOT NULL,
+        task_estimated_duration VARCHAR NOT NULL,
         solo_or_group VARCHAR NOT NULL
       );
 
@@ -44,7 +45,7 @@ const createTables=async()=>{
 
 const seedAndSync= async()=>{
   console.log('1 connecting to DB ')
-  client.connect()
+  // client.connect()
   console.log('2 connected to DB ')
   console.log('3 dropping tables')
   await dropTables()
@@ -52,10 +53,12 @@ const seedAndSync= async()=>{
   console.log('5 creating tables')
   await createTables()
   console.log('6 table created')
-  await createUser({email:'betty@fake.com', 
+  const betty = await createUser({email:'betty@fake.com', 
     password:'betty1'})
   console.log('7 user created')
-  await createTask({category:'Office', 
+  await createTask({
+    userId: betty.id,
+    category:'Office', 
     task:'Email Boop', 
     dueDate: '2025-01-04', 
     taskPlaceDistance:0, 
